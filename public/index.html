@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Srija's Online Shopping Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fb;
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-info {
+      font-size: 16px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 25px;
+      padding: 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .price {
+      font-size: 16px;
+      margin: 10px 0;
+      color: #555;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .add-btn {
+      background: #111;
+      color: white;
+    }
+
+    .add-btn:hover {
+      background: #333;
+    }
+
+    .cart-section {
+      padding: 30px 40px;
+      background: white;
+      border-top: 1px solid #eee;
+    }
+
+    .cart-section h2 {
+      margin-top: 0;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .buy-btn {
+      margin-top: 15px;
+      background: #4CAF50;
+      color: white;
+      width: 200px;
+    }
+
+    .buy-btn:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  Online Shopping Website
+  <div class="cart-info">
+    Total: ₹<span id="total">0</span>
+  </div>
+</header>
+
+<div class="products" id="products"></div>
+
+<div class="cart-section">
+  <h2>Cart</h2>
+  <div id="cart"></div>
+  <button class="buy-btn" onclick="buy()">Buy Now</button>
+</div>
+
+<script>
+async function loadProducts() {
+  const res = await fetch("/products");
+  const products = await res.json();
+
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+
+  products.forEach(p => {
+    container.innerHTML += `
+      <div class="card">
+        <div>
+          <h3>${p.name}</h3>
+          <div class="price">₹${p.price}</div>
+        </div>
+        <button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>
+          Add to Cart
+        </button>
+      </div>
+    `;
+  });
+}
+
+async function addToCart(product) {
+  await fetch("/cart", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(product)
+  });
+
+  loadCart();
+}
+
+async function loadCart() {
+  const res = await fetch("/cart");
+  const data = await res.json();
+
+  const cartDiv = document.getElementById("cart");
+  cartDiv.innerHTML = "";
+
+  data.cart.forEach(item => {
+    cartDiv.innerHTML += `
+      <div class="cart-item">
+        <span>${item.name}</span>
+        <span>₹${item.price}</span>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = data.total;
+}
+
+async function buy() {
+  await fetch("/buy", { method: "POST" });
+  alert("Purchase Successful 🎉");
+  loadCart();
+}
+
+loadProducts();
+loadCart();
+</script>
+
+</body>
+</html>

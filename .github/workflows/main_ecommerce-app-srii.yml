@@ -38,13 +38,15 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ecommerce-app-srii   # 👈 must match your App Service name
-          resource-group: sri-mini       # 👈 add this line
+          app-name: ecommerce-app-srii        # must match your App Service name
+          resource-group-name: sri-mini       # 👈 correct input name
           package: .
 
 
 
+
           
+
 
 
 

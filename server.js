@@ -20,7 +20,7 @@ app.post("/login", (req, res) => {
   }
 });
 
-// GET PRODUCTS
+// GET PRODUCT
 app.get("/products", (req, res) => {
   db.query("SELECT * FROM products", (err, results) => {
     if (err) return res.status(500).json(err);

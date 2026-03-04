@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "test": "echo 'No tests yet'"
-  }
+    "test": "echo 'No tests yet'"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,3 +19,4 @@
     "mysql2": "^3.18.2"
   }
 }
+

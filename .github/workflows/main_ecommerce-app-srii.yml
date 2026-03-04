@@ -1,13 +1,21 @@
-name: Build and Deploy Node.js App to Azure Web App
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy Node.js app to Azure Web App - ecommerce-app-srii
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # ✅ required for Azure login OIDC
+      contents: read    # ✅ required for actions/checkout
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,8 +41,10 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ecommerce-app-srii
+          app-name: ecommerce-app-srii   # 👈 must match your Azure Web App name
           package: .
 
 
+
           
+
